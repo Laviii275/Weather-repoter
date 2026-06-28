@@ -122,6 +122,45 @@ export default function App() {
     }
   };
 
+  // Automatically detect user's location using network IP geolocation on mount (no permission needed)
+  useEffect(() => {
+    const detectNetworkLocation = async () => {
+      try {
+        // Try ipwho.is first (reliable HTTPS IP geolocation)
+        const response = await fetch("https://ipwho.is/");
+        if (!response.ok) {
+          throw new Error("ipwho.is lookup failed");
+        }
+        const data = await response.json();
+        if (data && data.success && data.city) {
+          fetchWeather(data.city, data.country || "Global");
+          return;
+        }
+      } catch (err) {
+        console.warn("ipwho.is failed, trying fallback:", err);
+      }
+
+      try {
+        // Fallback to ipapi.co (reliable HTTPS IP geolocation fallback)
+        const response = await fetch("https://ipapi.co/json/");
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.city) {
+            fetchWeather(data.city, data.country_name || "Global");
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("ipapi.co failed, defaulting to Guwahati:", err);
+      }
+
+      // If both network requests fail, default to Guwahati
+      fetchWeather("Guwahati", "India");
+    };
+
+    detectNetworkLocation();
+  }, []);
+
 
 
 

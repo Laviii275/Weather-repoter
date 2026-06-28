@@ -1,9 +1,7 @@
 {
   "name": "Weathering App",
   "description": "A high-fidelity advanced weather diagnostic application featuring real-time telemetry, severe alerts, AI-driven meteorological reports, climate news, and customized search capabilities.",
-  "requestFramePermissions": [
-    "geolocation"
-  ],
+  "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]
